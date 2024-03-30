@@ -6,14 +6,11 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:34:46 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/30 15:24:27 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/03/30 20:06:48 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <threads.h>
-
-
 
 char	*get_next_line(int fd)
 {
@@ -21,37 +18,53 @@ char	*get_next_line(int fd)
 	char			**eol_split;
 	char			*tmp;
 	char			*buffer_line;
-	int				nl_pos;
-	
-	if (nl_detection(current_line) != -1) {
+
+	if (nl_detection(current_line) != -1)
 		buffer_line = current_line;
-		current_line = NULL;
-	}
-	else 
+	else
 		buffer_line = malloc_line(fd);
+	current_line = calc_current_line(current_line);
 	while (buffer_line != NULL)
 	{
-		nl_pos = nl_detection(buffer_line);
-		if (nl_pos == -1) {
-			tmp = current_line;
-			current_line = ft_strjoin(tmp, buffer_line);
-			free(tmp);
-			if (current_line == NULL)
-				return (free(buffer_line), NULL);
-			free(buffer_line);
+		if (nl_detection(buffer_line) == -1)
+		{
+			current_line = concat_current_line(current_line, buffer_line);
 			buffer_line = malloc_line(fd);
-			continue;
+			continue ;
 		}
-		eol_split = split(buffer_line, nl_pos);
-		tmp = ft_strjoin(current_line, eol_split[0]);
+		eol_split = split(buffer_line, nl_detection(buffer_line));
+		tmp = concat_current_line(current_line, eol_split[0]);
 		current_line = eol_split[1];
-		free(eol_split[0]);
 		return (free(eol_split), tmp);
 	}
-	return (NULL);
+	return (free(buffer_line), NULL);
 }
 
-char	*malloc_line(int fd) 
+char	*calc_current_line(char	*current_line)
+{
+	if (nl_detection(current_line) != -1)
+		return (NULL);
+	return (current_line);
+}
+
+char	*concat_current_line(char *current_line, char *buffer_line)
+{
+	char	*tmp;
+
+	tmp = current_line;
+	current_line = ft_strjoin(tmp, buffer_line);
+	if (current_line == NULL)
+	{
+		free(tmp);
+		free(buffer_line);
+		return (NULL);
+	}
+	free(tmp);
+	free(buffer_line);
+	return (current_line);
+}
+
+char	*malloc_line(int fd)
 {
 	char	*line;
 	int		read_status;
@@ -66,17 +79,6 @@ char	*malloc_line(int fd)
 	return (line);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 int main(void)
 {
 	int fd = open("./testfile.txt", O_RDONLY);
@@ -88,7 +90,7 @@ int main(void)
 		free(tab);
 		tab = get_next_line(fd);
 	}
-
+	free(tab);
 	close(fd);
 	return (0);
 }
