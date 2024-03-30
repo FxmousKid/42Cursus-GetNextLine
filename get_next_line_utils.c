@@ -6,26 +6,11 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:35:04 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/30 14:58:37 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/03/30 15:24:42 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-	
-char	*malloc_line(int fd) 
-{
-	char	*line;
-	int		read_status;
-
-	line = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (line == NULL)
-		return (NULL);
-	read_status = read(fd, line, BUFFER_SIZE);
-	if (read_status <= 0)
-		return (free(line), NULL);
-	line[read_status] = '\0';
-	return (line);
-}
 
 int	nl_detection(char *tab)
 {
@@ -88,6 +73,7 @@ char **split(char *str, int pos) {
 	str[pos] = '\0';
 	output[0] = ft_strjoin(str, "\n");
 	output[1] = ft_strjoin(str + pos + 1, "");
+	free(str);
 	return (output);
 }
 

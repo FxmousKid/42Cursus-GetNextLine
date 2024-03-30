@@ -6,7 +6,7 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:38:48 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/29 00:10:48 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/03/30 15:24:25 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 # include <fcntl.h>
 
 
+
+char	*get_next_line(int fd);
 char	*malloc_line(int fd);
 int		nl_detection(char *tab);
 char	*ft_strjoin(char *s1, char *s2);
+char	 **split(char *str, int pos);
 
-char **split(char *str, int pos);
 
 #endif

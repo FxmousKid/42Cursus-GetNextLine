@@ -6,7 +6,7 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:34:46 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/30 15:02:32 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/03/30 15:24:27 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,35 @@ char	*get_next_line(int fd)
 		eol_split = split(buffer_line, nl_pos);
 		tmp = ft_strjoin(current_line, eol_split[0]);
 		current_line = eol_split[1];
-		free(eol_split);
-		return (free(buffer_line), tmp);
+		free(eol_split[0]);
+		return (free(eol_split), tmp);
 	}
 	return (NULL);
 }
+
+char	*malloc_line(int fd) 
+{
+	char	*line;
+	int		read_status;
+
+	line = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (line == NULL)
+		return (NULL);
+	read_status = read(fd, line, BUFFER_SIZE);
+	if (read_status <= 0)
+		return (free(line), NULL);
+	line[read_status] = '\0';
+	return (line);
+}
+
+
+
+
+
+
+
+
+
 
 
 
