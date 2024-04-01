@@ -6,7 +6,7 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:34:46 by inazaria          #+#    #+#             */
-/*   Updated: 2024/04/01 14:35:44 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:44:32 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*get_next_line_aux(int fd)
 	else
 		buffer_line = malloc_line(fd);
 	current_line[fd] = calc_current_line(current_line[fd]);
-	while (buffer_line != NULL)
+	while (buffer_line != NULL && buffer_line[0] != '\0')
 	{
 		if (nl_detection(buffer_line) == -1)
 		{
@@ -81,7 +81,7 @@ char	*malloc_line(int fd)
 	if (line == NULL)
 		return (NULL);
 	read_status = read(fd, line, BUFFER_SIZE);
-	if (read_status <= 0)
+	if (read_status < 0)
 		return (free(line), NULL);
 	line[read_status] = '\0';
 	return (line);
