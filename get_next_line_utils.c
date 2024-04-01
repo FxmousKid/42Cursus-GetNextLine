@@ -6,7 +6,7 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:35:04 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/30 20:06:44 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:03:10 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static char	*ft_memcpy(char *dest, char *s1)
 	counter = 0;
 	while (s1 && s1[counter])
 		*tmp++ = s1[counter++];
-	*tmp = 0;
 	return (tmp);
 }
 
@@ -75,7 +74,7 @@ char	**split(char *str, int pos)
 		return (NULL);
 	str[pos] = '\0';
 	output[0] = ft_strjoin(str, "\n");
-	output[1] = ft_strjoin(str + pos + 1, "");
+	output[1] = ft_strjoin(str + pos, "");
 	free(str);
 	return (output);
 }
