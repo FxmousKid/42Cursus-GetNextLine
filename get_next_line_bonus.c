@@ -6,14 +6,14 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:34:46 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/30 20:18:42 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:35:44 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 #include <stdio.h>
 
-char	*get_next_line(int fd)
+char	*get_next_line_aux(int fd)
 {
 	static char		*current_line[1024];
 	char			**eol_split;
@@ -41,10 +41,17 @@ char	*get_next_line(int fd)
 	return (free(buffer_line), NULL);
 }
 
+char	*get_next_line(int fd)
+{
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
+		return (NULL);
+	return (get_next_line_aux(fd));
+}
+
 char	*calc_current_line(char	*current_line)
 {
 	if (nl_detection(current_line) != -1)
-		return (NULL);
+		return (0);
 	return (current_line);
 }
 
