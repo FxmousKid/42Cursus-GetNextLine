@@ -6,13 +6,14 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:34:46 by inazaria          #+#    #+#             */
-/*   Updated: 2024/03/30 20:06:48 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:11:57 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-char	*get_next_line(int fd)
+char	*get_next_line_aux(int fd)
 {
 	static char		*current_line;
 	char			**eol_split;
@@ -34,10 +35,16 @@ char	*get_next_line(int fd)
 		}
 		eol_split = split(buffer_line, nl_detection(buffer_line));
 		tmp = concat_current_line(current_line, eol_split[0]);
-		current_line = eol_split[1];
-		return (free(eol_split), tmp);
+		return (current_line = eol_split[1], free(eol_split), tmp);
 	}
 	return (free(buffer_line), NULL);
+}
+
+char	*get_next_line(int fd)
+{
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	return (get_next_line_aux(fd));
 }
 
 char	*calc_current_line(char	*current_line)
@@ -77,20 +84,4 @@ char	*malloc_line(int fd)
 		return (free(line), NULL);
 	line[read_status] = '\0';
 	return (line);
-}
-
-int main(void)
-{
-	int fd = open("./testfile.txt", O_RDONLY);
-	
-	char *tab = get_next_line(fd);
-	while (tab != NULL)
-	{
-		printf("%s", tab);
-		free(tab);
-		tab = get_next_line(fd);
-	}
-	free(tab);
-	close(fd);
-	return (0);
 }
