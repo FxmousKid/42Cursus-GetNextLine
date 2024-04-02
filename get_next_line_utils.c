@@ -6,34 +6,47 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:35:04 by inazaria          #+#    #+#             */
-/*   Updated: 2024/04/01 17:03:10 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/04/02 18:48:43 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	nl_detection(char *tab)
-{
-	int	counter;
-
-	counter = 0;
-	while (tab && tab[counter])
-	{
-		if (tab[counter] == '\n')
-			return (counter);
-		counter++;
-	}
-	return (-1);
-}
-
-size_t	ft_strlen(char *str)
+ssize_t	ft_strlen_to_char(char *str, char c)
 {
 	int	index;
 
 	index = 0;
+	if (str == NULL)
+		return (-1);
+	if (c == 0)
+	{
+		while (str && str[index])
+			index++;
+		return (index);
+	}
 	while (str && str[index])
+	{
+		if (str[index] == c)
+			return (index);
 		index ++;
-	return (index);
+	}
+	return (-1);
+}
+
+char	*malloc_line(int fd)
+{
+	char	*line;
+	int		read_status;
+
+	line = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (line == NULL)
+		return (NULL);
+	read_status = read(fd, line, BUFFER_SIZE);
+	if (read_status <= 0)
+		return (free(line), NULL);
+	line[read_status] = '\0';
+	return (line);
 }
 
 static char	*ft_memcpy(char *dest, char *s1)
@@ -54,7 +67,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		size_malloc;
 	char	*tmp;
 
-	size_malloc = ft_strlen(s1) + ft_strlen(s2);
+	size_malloc = ft_strlen_to_char(s1, 0) + ft_strlen_to_char(s2, 0);
 	if (size_malloc == 0)
 		return (NULL);
 	tab = (char *) malloc(sizeof(char) * (size_malloc + 1));
@@ -74,7 +87,7 @@ char	**split(char *str, int pos)
 		return (NULL);
 	str[pos] = '\0';
 	output[0] = ft_strjoin(str, "\n");
-	output[1] = ft_strjoin(str + pos, "");
+	output[1] = ft_strjoin(str + pos + 1, "");
 	free(str);
 	return (output);
 }
