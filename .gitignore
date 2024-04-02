@@ -1,6 +1,6 @@
 # Files related to the project 
 test*
-
+*.o
 # Valgrind Files
 vgcore*
 
