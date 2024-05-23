@@ -1,6 +1,14 @@
+# Dev env files
+**.vscode
+**.swp
+**compile_commands.json
+**.clangd
+
 # Files related to the project 
 test*
 *.o
+*.out
+
 # Valgrind Files
 vgcore*
 
