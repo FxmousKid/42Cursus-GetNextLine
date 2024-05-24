@@ -6,7 +6,7 @@
 /*   By: inazaria <inazaria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:38:48 by inazaria          #+#    #+#             */
-/*   Updated: 2024/05/22 18:43:54 by inazaria         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:45:58 by inazaria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 100
+# endif
 
 char	*calc_current_line(char	*current_line);
 char	*get_next_line(int fd);
